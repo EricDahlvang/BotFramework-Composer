@@ -225,7 +225,17 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
+      const {
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale,
+        qnaKbUrls,
+        templateDir,
+        eTag,
+      } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
         templateId,
@@ -233,7 +243,9 @@ export const projectDispatcher = () => {
         description,
         location,
         schemaUrl,
-        locale
+        locale,
+        templateDir,
+        eTag
       );
       set(botProjectIdsState, [projectId]);
 
