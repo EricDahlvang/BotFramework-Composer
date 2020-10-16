@@ -163,8 +163,14 @@ async function monitorWindowForQueryParams(
 
         // clean up the window and return params
         window.removeListener('closed', prematureCloseListener);
-        window.close();
-        resolve(result);
+        try {
+          window.close();
+          resolve(result);
+        } catch (e) {
+          // Mac complains about closing the window
+          console.error('Error closing monitored window: ', e);
+          resolve(result);
+        }
       }
     });
   });
