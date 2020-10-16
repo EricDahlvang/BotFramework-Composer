@@ -41,13 +41,18 @@ export interface OAuthTokenOptions extends OAuthLoginOptions {
 }
 
 function getLoginUrl(options: OAuthLoginOptions): string {
-  const { clientId, redirectUri = composerRedirectUri } = options;
+  const { clientId } = options;
+  let { redirectUri = composerRedirectUri } = options;
   const scopes = [...(options.scopes || [])];
   if (scopes.indexOf('openid') === -1) {
     scopes.push('openid');
   }
   if (scopes.indexOf('profile') === -1) {
     scopes.push('profile');
+  }
+  if (process.env.COMPOSER_REDIRECT_URI) {
+    console.log('detected custom redirect URI: ', process.env.COMPOSER_REDIRECT_URI);
+    redirectUri = process.env.COMPOSER_REDIRECT_URI;
   }
   const params = [
     `client_id=${encodeURIComponent(clientId)}`,
@@ -64,7 +69,12 @@ function getLoginUrl(options: OAuthLoginOptions): string {
 }
 
 export function getAccessTokenUrl(options: OAuthTokenOptions): string {
-  const { clientId, idToken, redirectUri = composerRedirectUri, scopes = [] } = options;
+  const { clientId, idToken, scopes = [] } = options;
+  let { redirectUri = composerRedirectUri } = options;
+  if (process.env.COMPOSER_REDIRECT_URI) {
+    console.log('detected custom redirect URI: ', process.env.COMPOSER_REDIRECT_URI);
+    redirectUri = process.env.COMPOSER_REDIRECT_URI;
+  }
   const params = [
     `client_id=${encodeURIComponent(clientId)}`,
     `response_type=token`,
@@ -125,7 +135,9 @@ async function monitorWindowForQueryParams(
     };
     window.addListener('closed', prematureCloseListener);
     window.webContents.on('will-redirect', (event, redirectUrl) => {
-      if (redirectUrl.startsWith(composerRedirectUri)) {
+      const urlToCheckFor = process.env.COMPOSER_REDIRECT_URI || composerRedirectUri;
+      console.log('monitoring for URL: ', urlToCheckFor);
+      if (redirectUrl.startsWith(urlToCheckFor)) {
         // We have reached the end of the oauth flow; don't actually complete the redirect.
         // Just rip the desired parameters from the url and close the window.
         event.preventDefault();

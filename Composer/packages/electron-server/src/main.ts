@@ -23,6 +23,8 @@ import { getAccessToken, loginAndGetIdToken, OAuthLoginOptions } from './utility
 import { isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
 
+console.log(JSON.stringify(process.env, null, 2));
+
 const microsoftLogoPath = join(__dirname, '../resources/ms_logo.svg');
 let currentAppLocale = getAppLocale().appLocale;
 
