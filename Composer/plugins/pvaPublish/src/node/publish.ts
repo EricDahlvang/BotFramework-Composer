@@ -21,7 +21,11 @@ const API_VERSION = '1';
 //const BASE_URL = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
 const authCredentials = {
   clientId: process.env.PVA_CLIENT_ID || 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
-  scopes: process.env.PVA_SCOPES ? [process.env.PVA_SCOPES] : ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+  scopes: process.env.PVA_SCOPES
+    ? [process.env.PVA_SCOPES]
+    : [
+        /*'a522f059-bb65-47c0-8934-7db6e5286414/.default'*/
+      ], // int / ppe
 };
 
 const getBaseUrl = () => {

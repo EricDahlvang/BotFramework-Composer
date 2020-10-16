@@ -150,7 +150,8 @@ async function monitorWindowForQueryParams(
         if (error || errorDescription) {
           window.removeListener('closed', prematureCloseListener);
           window.close();
-          reject({ error, errorDescription });
+          console.error('Got AAD error: ', error, errorDescription);
+          return reject({ error, errorDescription });
         }
 
         // pull desired params off of the url
@@ -163,14 +164,8 @@ async function monitorWindowForQueryParams(
 
         // clean up the window and return params
         window.removeListener('closed', prematureCloseListener);
-        try {
-          window.close();
-          resolve(result);
-        } catch (e) {
-          // Mac complains about closing the window
-          console.error('Error closing monitored window: ', e);
-          resolve(result);
-        }
+        window.close();
+        resolve(result);
       }
     });
   });

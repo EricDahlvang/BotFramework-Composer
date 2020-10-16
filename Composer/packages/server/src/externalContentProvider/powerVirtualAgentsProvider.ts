@@ -22,7 +22,11 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
 //const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
   clientId: process.env.PVA_CLIENT_ID || COMPOSER_1P_APP_ID,
-  scopes: process.env.PVA_SCOPES ? [process.env.PVA_SCOPES] : ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+  scopes: process.env.PVA_SCOPES
+    ? [process.env.PVA_SCOPES]
+    : [
+        /* 'a522f059-bb65-47c0-8934-7db6e5286414/.default'*/
+      ], // int / ppe
 };
 
 const getBaseUrl = () => {

@@ -58,7 +58,7 @@ function processArgsForWindows(args: string[]): string {
     name: 'toanzian-test-bot1',
     tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47',
   };
-  args.push(`bfcomposer://import?source=pva&payload=${encodeURIComponent(JSON.stringify(payload))}`);
+  args.push(`bfcomposer123://import?source=pva&payload=${encodeURIComponent(JSON.stringify(payload))}`);
   const deepLinkUrl = args.find((arg) => arg.startsWith(composerProtocol));
   if (deepLinkUrl) {
     return parseDeepLinkUrl(deepLinkUrl);
