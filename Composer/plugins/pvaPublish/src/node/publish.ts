@@ -15,42 +15,40 @@ import {
   PullResponse,
 } from './types';
 
+const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 const API_VERSION = '1';
-//const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/v${API_VERSION}`; // prod / sdf
-//const BASE_URL = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
-//const BASE_URL = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
 const authCredentials = {
-  clientId: process.env.PVA_CLIENT_ID || 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
-  scopes: process.env.PVA_SCOPES
-    ? [process.env.PVA_SCOPES]
-    : [
-        /*'a522f059-bb65-47c0-8934-7db6e5286414/.default'*/
-      ], // int / ppe
+  // web auth flow
+  clientId: COMPOSER_1P_APP_ID,
+  scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+
+  // electron auth flow
+  targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
 };
 
 const getBaseUrl = () => {
   const pvaEnv = (process.env.COMPOSER_PVA_ENV || '').toLowerCase();
   switch (pvaEnv) {
     case 'prod': {
-      const url = `https://powerva.microsoft.com/v${API_VERSION}`;
+      const url = `https://powerva.microsoft.com/api/botmanagement/v${API_VERSION}`;
       console.log('prod detected, operation using PVA url: ', url);
       return url;
     }
 
     case 'ppe': {
-      const url = `https://bots.ppe.customercareintelligence.net/v${API_VERSION}`;
+      const url = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
       console.log('ppe detected, operation using PVA url: ', url);
       return url;
     }
 
     case 'int': {
-      const url = `https://bots.int.customercareintelligence.net/v${API_VERSION}`;
+      const url = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
       console.log('int detected, operation using PVA url: ', url);
       return url;
     }
 
     default: {
-      const url = `https://bots.int.customercareintelligence.net/v${API_VERSION}`;
+      const url = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
       console.log('no flag detected, operation using PVA url: ', url);
       return url;
     }
@@ -75,7 +73,7 @@ export const publish = async (
     botId,
     envId,
     tenantId,
-    deleteMissingComponents, // publish behavior
+    deleteMissingDependencies, // publish behavior
   } = config;
   const { comment = '' } = metadata;
 
@@ -118,14 +116,13 @@ export const publish = async (
         reject(err);
       });
       zipReadStream.once('readable', () => {
-        console.log('read stream is readable!');
         resolve();
       });
     });
     const length = zipReadStream.readableLength;
 
     // initiate the publish job
-    const url = `${getBaseUrl()}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingComponents=${deleteMissingComponents}&comment=${encodeURIComponent(
+    const url = `${getBaseUrl()}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}&comment=${encodeURIComponent(
       comment
     )}`;
     const res = await fetch(url, {
@@ -279,7 +276,7 @@ export const history = async (
     const jobs: PVAPublishJob[] = await res.json();
 
     // return the first 20
-    return jobs.map((job) => xformJobToResult(job)).slice(19);
+    return jobs.map((job) => xformJobToResult(job)).slice(0, 19);
   } catch (e) {
     return [];
   }

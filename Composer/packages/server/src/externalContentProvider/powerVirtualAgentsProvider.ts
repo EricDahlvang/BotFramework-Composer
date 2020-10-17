@@ -18,15 +18,13 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   triggerId?: string;
 };
 
-//const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
-//const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
-  clientId: process.env.PVA_CLIENT_ID || COMPOSER_1P_APP_ID,
-  scopes: process.env.PVA_SCOPES
-    ? [process.env.PVA_SCOPES]
-    : [
-        /* 'a522f059-bb65-47c0-8934-7db6e5286414/.default'*/
-      ], // int / ppe
+  // web auth flow
+  clientId: COMPOSER_1P_APP_ID,
+  scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+
+  // electron auth flow
+  targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
 };
 
 const getBaseUrl = () => {
