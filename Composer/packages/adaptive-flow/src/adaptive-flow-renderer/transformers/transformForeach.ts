@@ -13,7 +13,13 @@ export function transformForeach(
   input: any,
   jsonpath: string
 ): { foreachDetail: IndexedNode; stepGroup: IndexedNode; loopBegin: IndexedNode; loopEnd: IndexedNode } | null {
-  if (!input || (input.$kind !== AdaptiveKinds.Foreach && input.$kind !== AdaptiveKinds.ForeachPage && input.$kind !== AdaptiveKinds.DoWhile)) return null;
+  if (
+    !input ||
+    (input.$kind !== AdaptiveKinds.Foreach &&
+      input.$kind !== AdaptiveKinds.ForeachPage &&
+      input.$kind !== AdaptiveKinds.DoWhile)
+  )
+    return null;
 
   const foreachDetailNode = new IndexedNode(jsonpath, {
     ...input,
