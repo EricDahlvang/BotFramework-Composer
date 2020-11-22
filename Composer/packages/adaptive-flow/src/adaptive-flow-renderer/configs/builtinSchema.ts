@@ -44,6 +44,14 @@ const builtinVisualSDKSchema: FlowUISchema = {
       body: '=concat("Each page of ", coalesce(action.pageSize, "?"), " in ", coalesce(action.page, "?"))',
     },
   },
+  [SDKKinds.DoWhile]: {
+    widget: 'ForeachWidget',
+    nowrap: true,
+    loop: {
+      widget: 'ActionCard',
+      body: '=concat("Do While ", coalesce(action.condition, "?"))',
+    },
+  },
 };
 
 export default builtinVisualSDKSchema;

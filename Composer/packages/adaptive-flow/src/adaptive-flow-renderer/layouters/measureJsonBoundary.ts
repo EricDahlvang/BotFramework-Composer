@@ -127,6 +127,7 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case AdaptiveKinds.Foreach:
     case AdaptiveKinds.ForeachPage:
+    case AdaptiveKinds.DoWhile:
       boundary = measureForeachBoundary(json);
       break;
     case AdaptiveKinds.AttachmentInput:

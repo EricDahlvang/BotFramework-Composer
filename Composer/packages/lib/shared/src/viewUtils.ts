@@ -62,7 +62,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.LOOPING]: {
     label: formatMessage('Looping'),
-    types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop],
+    types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop, SDKKinds.DoWhile],
   },
   [DialogGroup.MEMORY]: {
     label: formatMessage('Manage properties'),

@@ -83,6 +83,10 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Break out of loop'),
     submenu: [SubmenuNames.Looping],
   },
+  [SDKKinds.DoWhile]: {
+    label: formatMessage('Do While Loop'),
+    submenu: [SubmenuNames.Looping],
+  },
   // Dialog management
   [SDKKinds.BeginDialog]: {
     label: formatMessage('Begin a new dialog'),
